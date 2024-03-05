@@ -1,0 +1,2606 @@
+#include<iostream>
+#include<fstream>
+#include<string.h>
+#include<string>
+#include <sstream>
+char** cust;
+char** veh;
+char** serv;
+char** driv;
+
+using namespace std;
+class name
+{
+private:
+	char* fname;
+	char* lname;
+public:
+	name(char* = nullptr, char* = nullptr);
+	name(name&);
+	void setvalue(char*, char*);
+	void getvalue();
+	friend ostream& operator << (ostream& out, const name& obj);
+	~name();
+};
+ostream& operator << (ostream& out, const name& obj) {
+	out << obj.fname << " " << obj.lname;
+	return out;
+}
+name::name(char* fm, char* lm)
+{
+	fname = new char[50];
+	lname = new char[50];
+	for (int i = 0; i < 50; i++)
+	{
+		fname[i] = fm[i];
+	}
+	for (int i = 0; i < 50; i++)
+	{
+		lname[i] = lm[i];
+	}
+}
+name::name(name& obj) {
+	fname = new char[50];
+	lname = new char[50];
+	for (int i = 0; i < 50; i++)
+	{
+		fname[i] = obj.fname[i];
+	}
+	for (int i = 0; i < 50; i++)
+	{
+		lname[i] = obj.lname[i];
+	}
+}
+void name::setvalue(char* a, char* b) {
+	fname = new char[50];
+	lname = new char[50];
+	for (int i = 0; i < 50; i++)
+	{
+		fname[i] = a[i];
+	}
+	for (int i = 0; i < 50; i++)
+	{
+		lname[i] = b[i];
+	}
+}
+void name::getvalue() {
+	cout << fname << endl;
+	cout << lname << endl;
+}
+name::~name()
+{
+	delete[]lname;
+	delete[]fname;
+}
+class date
+{
+private:
+	int day, month, year;
+public:
+	date(int = 1, int = 2, int = 3);
+	void setvalue(int, int, int);
+	void getvalue();
+	friend ostream& operator << (ostream& out, const date& obj);
+	~date();
+};
+
+date::date(int d, int m, int y)
+{
+	day = d;
+	month = m;
+	year = y;
+}
+void date::setvalue(int d, int m, int y) {
+	day = d;
+	month = m;
+	year = y;
+}
+void date::getvalue() {
+	cout << day << "/" << month << "/" << year;
+}
+ostream& operator << (ostream& out, const date& obj) {
+	out << obj.day << "/" << obj.month << "/" << obj.year;
+	return out;
+}
+date::~date()
+{
+}
+class mtime
+{
+public:
+	mtime(int = 0, int = 0, int = 0);
+	void setvalue(int, int, int);
+	void getvalue();
+	friend ostream& operator << (ostream& out, const mtime& obj);
+	~mtime();
+
+private:
+	int hour, minute, second;
+};
+mtime::mtime(int hr, int min, int sec)
+{
+	hour = hr;
+	minute = min;
+	second = sec;
+}
+void mtime::setvalue(int hr, int min, int sec) {
+	hour = hr;
+	minute = min;
+	second = sec;
+}
+void mtime::getvalue() {
+	cout << endl << hour << "/" << minute << "/" << second ;
+}
+ostream& operator << (ostream& out, const mtime& obj) {
+	out << obj.hour << "/" << obj.minute << "/" << obj.second ;
+	return out;
+}
+mtime::~mtime()
+{
+}
+class service
+{
+protected:
+	char* source;
+	char* destination;
+	float distance;
+	date booking_date;
+	mtime booking_time;
+	bool status;
+public:
+	service(char*, char*, float, int, int, int,int,int,int,int,int,int);
+	~service();
+	int c_id;//customer,vehicle and driver id;
+	int v_id;
+	int d_id;
+	friend void compservice(int,int);
+	friend void cancelservice(int ,int);
+	friend void unbookdriver(int);
+	//friend void unbookdriver1(int);
+	//friend void unbookvehicle(int);
+};
+service::service(char* a, char* b,float c, int e, int f, int g,int hr,int min,int sec,int day,int mon,int year) {
+	source = new char[50];
+	destination = new char[50];
+	for (int i = 0; i < 50; i++)
+	{
+		source[i] = a[i];
+	}
+	for (int i = 0; i < 50; i++)
+	{
+		destination[i] = b[i];
+	}
+	 status = 0;
+     distance=c;
+	 date booking_date (day,mon,year);
+	 booking_date.setvalue(day, mon, year);
+	 mtime booking_time (hr,min,sec);
+	 booking_time.setvalue(hr, min, sec);
+	c_id=e;
+	v_id=f;
+	d_id=g;
+
+}
+service::~service()
+{
+}
+void compservice(int a1, int b,int c) {
+	//ostringstream str1;
+	//str1 << a1;
+	//string a = str1.str();
+	////cout << a << endl;
+	////char* nary = new char[500];
+	//string nary;
+	//int line = 0;
+	//int ch;
+	//string st;
+	//ifstream out;
+	//out.open("service.txt", ios::app);
+	//int j = 0;
+	//while (!out.eof())
+	//{
+	//	j++;
+	//	getline(out, st);
+	//	if (st[0] != '\0')
+	//	{
+	//		/*out.getline(nary, 160);
+	//		cout << nary;*/
+	//		ch = 0;
+	//		for (int i = 12, j = 0; i < 17, j < 5; i++, j++)
+	//		{
+	//			if (st[i] == a[j])
+	//				ch++;
+	//		}
+	//		if (ch == 5)
+	//		{
+	//			nary = st;
+	//			line = j;
+	//			break;
+	//		}
+	//	}
+	//}
+	//out.close();
+	//// cout << nary<<endl;
+	// //cout << line;
+	//int g = 0;
+	//for (int i = 0; nary[i] != '\0'; i++) {
+	//	if (nary[i] == '/')
+	//		g++;
+	//	if (g == 6)
+	//	{
+	//		/*cout << "word :" <<*/
+	//		nary[i + 9] = '1';
+	//		cout << nary[i + 9];
+	//		/*cout << endl << i << endl;*/
+	//		break;
+	//	}
+	//}
+	////cout << nary;
+	//if (line != 0) {
+	//	ifstream out("service.txt");
+	//	ofstream in;
+	//	in.open("temp.txt", ofstream::out);
+	//	char c;
+	//	int line_no = 1;
+	//	while (out.get(c))
+	//	{
+	//		if (c == '\n')
+	//			line_no++;
+	//		if (line_no != line)
+	//			in << c;
+	//	}
+	//	in.close();
+	//	out.close();
+	//	remove("service.txt");
+	//	rename("temp.txt", "service.txt");
+	//}
+	//ofstream in;
+	//in.open("service.txt", ios::app);
+	//in << nary << "\n";
+	//in.close();
+	/*unbookdriver1(b);
+	unbookvehicle(c);*/
+	ostringstream str1;
+	str1 << a1;
+	string a = str1.str();
+	//cout << a << endl;
+	//char* nary = new char[500];
+	string nary;
+	int line = 0;
+	int ch;
+	string st;
+	ifstream out;
+	out.open("vehicle.txt", ios::app);
+	int j = 0;
+	while (!out.eof())
+	{
+		j++;
+		getline(out, st);
+		if (st[0] != '\0')
+		{
+			/*out.getline(nary, 160);
+			cout << nary;*/
+			ch = 0;
+			for (int i = 12, j = 0; i < 17, j < 5; i++, j++)
+			{
+				if (st[i] == a[j])
+					ch++;
+			}
+			if (ch == 5)
+			{
+				nary = st;
+				line = j;
+				break;
+			}
+		}
+	}
+	out.close();
+	// cout << nary<<endl;
+	 //cout << line;
+	int g = 0;
+	for (int i = 0; nary[i] != '\0'; i++) {
+		if (nary[i] == '/')
+			g++;
+		if (g == 6)
+		{
+			/*cout << "word :" <<*/
+			nary[i + 9] = '0';
+			cout << nary[i + 9];
+			/*cout << endl << i << endl;*/
+			break;
+		}
+	}
+	//cout << nary;
+	if (line != 0) {
+		ifstream out("vehicle.txt");
+		ofstream in;
+		in.open("temp.txt", ofstream::out);
+		char c;
+		int line_no = 1;
+		while (out.get(c))
+		{
+			if (c == '\n')
+				line_no++;
+			if (line_no != line)
+				in << c;
+		}
+		in.close();
+		out.close();
+		remove("vehicle.txt");
+		rename("temp.txt", "vehicle.txt");
+	}
+	ofstream in;
+	in.open("vehicle.txt", ios::app);
+	in << nary << "\n";
+	in.close();
+}
+void cancelservice(int a1, int b,int c) {
+	//ostringstream str1;////
+	//str1 << a1;
+	//string a = str1.str();
+	////cout << a << endl;
+	////char* nary = new char[500];
+	//string nary;
+	//int line = 0;
+	//int ch;
+	//string st;
+	//ifstream out;
+	//out.open("service.txt", ios::app);
+	//int j = 0;
+	//while (!out.eof())
+	//{
+	//	j++;
+	//	getline(out, st);
+	//	if (st[0] != '\0')
+	//	{
+	//		/*out.getline(nary, 160);
+	//		cout << nary;*/
+	//		ch = 0;
+	//		for (int i = 12, j = 0; i < 17, j < 5; i++, j++)
+	//		{
+	//			if (st[i] == a[j])
+	//				ch++;
+	//		}
+	//		if (ch == 5)
+	//		{
+	//			nary = st;
+	//			line = j;
+	//			break;
+	//		}
+	//	}
+	//}
+	//out.close();
+	//// cout << nary<<endl;
+	// //cout << line;
+	//int g = 0;
+	//for (int i = 0; nary[i] != '\0'; i++) {
+	//	if (nary[i] == '/')
+	//		g++;
+	//	if (g == 6)
+	//	{
+	//		/*cout << "word :" <<*/
+	//		nary[i + 9] = '2';
+	//		cout << nary[i + 9];
+	//		/*cout << endl << i << endl;*/
+	//		break;
+	//	}
+	//}
+	////cout << nary;
+	//if (line != 0) {
+	//	ifstream out("service.txt");
+	//	ofstream in;
+	//	in.open("temp.txt", ofstream::out);
+	//	char c;
+	//	int line_no = 1;
+	//	while (out.get(c))
+	//	{
+	//		if (c == '\n')
+	//			line_no++;
+	//		if (line_no != line)
+	//			in << c;
+	//	}
+	//	in.close();
+	//	out.close();
+	//	remove("service.txt");
+	//	rename("temp.txt", "service.txt");
+	//}
+	//ofstream in;
+	//in.open("service.txt", ios::app);
+	//in << nary << "\n";
+	//in.close();
+	ostringstream str1;
+	str1 << a1;
+	string a = str1.str();
+	//cout << a << endl;
+	//char* nary = new char[500];
+	string nary;
+	int line = 0;
+	int ch;
+	string st;
+	ifstream out;
+	out.open("vehicle.txt", ios::app);
+	int j = 0;
+	while (!out.eof())
+	{
+		j++;
+		getline(out, st);
+		if (st[0] != '\0')
+		{
+			/*out.getline(nary, 160);
+			cout << nary;*/
+			ch = 0;
+			for (int i = 12, j = 0; i < 17, j < 5; i++, j++)
+			{
+				if (st[i] == a[j])
+					ch++;
+			}
+			if (ch == 5)
+			{
+				nary = st;
+				line = j;
+				break;
+			}
+		}
+	}
+	out.close();
+	// cout << nary<<endl;
+	 //cout << line;
+	int g = 0;
+	for (int i = 0; nary[i] != '\0'; i++) {
+		if (nary[i] == '/')
+			g++;
+		if (g == 6)
+		{
+			/*cout << "word :" <<*/
+			nary[i + 9] = '0';
+			cout << nary[i + 9];
+			/*cout << endl << i << endl;*/
+			break;
+		}
+	}
+	//cout << nary;
+	if (line != 0) {
+		ifstream out("vehicle.txt");
+		ofstream in;
+		in.open("temp.txt", ofstream::out);
+		char c;
+		int line_no = 1;
+		while (out.get(c))
+		{
+			if (c == '\n')
+				line_no++;
+			if (line_no != line)
+				in << c;
+		}
+		in.close();
+		out.close();
+		remove("vehicle.txt");
+		rename("temp.txt", "vehicle.txt");
+	}
+	ofstream in;
+	in.open("vehicle.txt", ios::app);
+	in << nary << "\n";
+	in.close();
+	/*unbookdriver(b);
+	unbookvehicle(c);*/
+}
+void unbookvehicle(int a1) {
+	ostringstream str1;
+	str1 << a1;
+	string a = str1.str();
+	//cout << a << endl;
+	//char* nary = new char[500];
+	string nary;
+	int line = 0;
+	int ch;
+	string st;
+	ifstream out;
+	out.open("vehicle.txt", ios::app);
+	int j = 0;
+	while (!out.eof())
+	{
+		j++;
+		getline(out, st);
+		if (st[0] != '\0')
+		{
+			/*out.getline(nary, 160);
+			cout << nary;*/
+			ch = 0;
+			for (int i = 12, j = 0; i < 17, j < 5; i++, j++)
+			{
+				if (st[i] == a[j])
+					ch++;
+			}
+			if (ch == 5)
+			{
+				nary = st;
+				line = j;
+				break;
+			}
+		}
+	}
+	out.close();
+	// cout << nary<<endl;
+	 //cout << line;
+	int g = 0;
+	for (int i = 0; nary[i] != '\0'; i++) {
+		if (nary[i] == '/')
+			g++;
+		if (g == 6)
+		{
+			/*cout << "word :" <<*/
+			nary[i + 9] = '1';
+			cout << nary[i + 9];
+			/*cout << endl << i << endl;*/
+			break;
+		}
+	}
+	//cout << nary;
+	if (line != 0) {
+		ifstream out("vehicle.txt");
+		ofstream in;
+		in.open("temp.txt", ofstream::out);
+		char c;
+		int line_no = 1;
+		while (out.get(c))
+		{
+			if (c == '\n')
+				line_no++;
+			if (line_no != line)
+				in << c;
+		}
+		in.close();
+		out.close();
+		remove("vehicle.txt");
+		rename("temp.txt", "vehicle.txt");
+	}
+	ofstream in;
+	in.open("vehicle.txt", ios::app);
+	in << nary << "\n";
+	in.close();
+}
+void unbookdriver(int a1) {
+	ostringstream str1;
+	str1 << a1;
+	string a = str1.str();
+	//cout << a << endl;
+	string nary;
+	int ch = 0;
+	int line = 0;
+	string st;
+	ifstream out;
+	out.open("driver.txt");
+	int j = 0;
+	while (!out.eof())
+	{
+		j++;
+		getline(out, st);
+		if (st[0] != '\0') {
+			ch = 0;
+			for (int i = 11, j = 0; i < 16, j < 5; i++, j++)
+			{
+				//	cout << st[i];
+				if (st[i] == a[j])
+					ch++;
+			}
+			if (ch == 5)
+			{
+				nary = st;
+				line = j;
+				break;
+			}
+		}
+	}
+	out.close();
+	//cout <<"hlo" << nary << endl;
+	cout << line;
+	int g = 0;
+	for (int i = 0; nary[i] != '\0'; i++) {
+		if (nary[i] == '/')
+			g++;
+		if (g == 5)
+		{
+			/*cout << "word :" <<*/
+			nary[i + 9] = '1';
+			cout << nary[i + 9];
+			/*cout << endl << i << endl;*/
+			break;
+		}
+	}
+	//	cout << nary;
+	if (line != 0) {
+		ifstream out("driver.txt");
+		ofstream in;
+		in.open("temp.txt", ofstream::out);
+		char c;
+		int line_no = 1;
+		while (out.get(c))
+		{
+			if (c == '\n')
+				line_no++;
+			if (line_no != line)
+				in << c;
+		}
+		in.close();
+		out.close();
+		remove("driver.txt");
+		rename("temp.txt", "driver.txt");
+	}
+	ofstream in;
+	in.open("driver.txt", ios::app);
+	in << nary << "\n";
+	in.close();
+	out.close();
+	cout << line;
+	if (line != 0) {
+		ifstream out("driver.txt");
+		ofstream in;
+		in.open("temp.txt", ofstream::out);
+		char c;
+		int line_no = 1;
+		while (out.get(c))
+		{
+			if (c == '\n')
+				line_no++;
+			if (line_no != line)
+				in << c;
+		}
+		in.close();
+		out.close();
+		remove("driver.txt");
+		rename("temp.txt", "driver.txt");
+	}
+	ofstream inn;
+	inn.open("driver.txt", ios::app);
+	inn << nary << "\n";
+	inn.close();
+}
+void unbookdriver1(int a1) {
+	ostringstream str1;
+	str1 << a1;
+	string a = str1.str();
+	//cout << a << endl;
+	string nary;
+	int ch = 0;
+	int line = 0;
+	string st;
+	ifstream out;
+	out.open("driver.txt");
+	int j = 0;
+	while (!out.eof())
+	{
+		j++;
+		getline(out, st);
+		if (st[0] != '\0') {
+			ch = 0;
+			for (int i = 11, j = 0; i < 16, j < 5; i++, j++)
+			{
+				//	cout << st[i];
+				if (st[i] == a[j])
+					ch++;
+			}
+			if (ch == 5)
+			{
+				nary = st;
+				line = j;
+				break;
+			}
+		}
+	}
+	out.close();
+	//cout <<"hlo" << nary << endl;
+	cout << line;
+	int g = 0;
+	for (int i = 0; nary[i] != '\0'; i++) {
+		if (nary[i] == '/')
+			g++;
+		if (g == 5)
+		{
+			/*cout << "word :" <<*/
+			nary[i + 9] = '1';
+			cout << nary[i + 9];
+			/*cout << endl << i << endl;*/
+			break;
+		}
+	}
+	//	cout << nary;
+	if (line != 0) {
+		ifstream out("driver.txt");
+		ofstream in;
+		in.open("temp.txt", ofstream::out);
+		char c;
+		int line_no = 3;
+		while (out.get(c))
+		{
+			if (c == '\n')
+				line_no++;
+			if (line_no != line)
+				in << c;
+		}
+		in.close();
+		out.close();
+		remove("driver.txt");
+		rename("temp.txt", "driver.txt");
+	}
+	ofstream in;
+	in.open("driver.txt", ios::app);
+	in << nary << "\n";
+	in.close();
+	out.close();
+	cout << line;
+	if (line != 0) {
+		ifstream out("driver.txt");
+		ofstream in;
+		in.open("temp.txt", ofstream::out);
+		char c;
+		int line_no = 1;
+		while (out.get(c))
+		{
+			if (c == '\n')
+				line_no++;
+			if (line_no != line)
+				in << c;
+		}
+		in.close();
+		out.close();
+		remove("driver.txt");
+		rename("temp.txt", "driver.txt");
+	}
+	ofstream inn;
+	inn.open("driver.txt", ios::app);
+	inn << nary << "\n";
+	inn.close();
+}
+class ride :public service
+{
+public:
+	ride(int , char*, char*, float, int, int, int, int, int, int, int, int, int);
+	~ride();
+private:
+	int no_of_passenger;
+};
+
+ride::ride(int nops, char* a, char* b, float c, int e, int f, int g, int hr, int min, int sec, int day, int mon, int year) :service( a, b, c,e,f,g,hr,min,sec,day,mon,year)
+{
+	no_of_passenger = nops;
+	ofstream in;
+	in.open("service.txt", ios::app);
+	in <<"status :"<<status <<"/" << "source :" << source << "/ " << "Destination :" << destination << "/" << "Distance :" << distance << "/";
+	in << "customer id :" << c_id << "/" << "Driver  id :" << d_id << "/" << "vehicle id :" << "/" << v_id;
+	in << "Booking date :" <<booking_date<<"/" << "booking time :" << booking_time << "/"<<"no passenger :"<<nops << "\n";
+	in.close();
+}
+
+ride::~ride()
+{
+}
+class delivery :public service
+{
+public:
+	delivery(float gdw, string gdty, char* a, char* b, float c, int e, int f, int g, int hr, int min, int sec, int day, int mon, int year):service(a, b, c, e, f, g, hr, min, sec, day, mon, year)
+	{
+		goods_weight=gdw;
+		good_type=gdty;
+		ofstream in;
+		in.open("service.txt", ios::app);
+		in << "status :" << status << "/" << "source :" << source << "/ " << "Destination :" << destination << "/" << "Distance :" << distance << "/";
+		in << "customer id :" << c_id << "/" << "Driver  id :" << d_id << "/" << "vehicle id :" << "/" << v_id;
+		in << "Booking date :" << booking_date << "/" << "booking time :" << booking_time << "/" << "Goods type :" << gdty << "/";
+		in<<"Goods weight :"<<gdw << "\n";
+		in.close();
+	}
+private:
+	float goods_weight;
+	string good_type;
+};
+class person :date
+{
+public:
+	person(char* = nullptr, char* = nullptr, int = 0, int = 0, int = 0, int = 0, int = 0);
+	~person();
+
+protected:
+	//name pname;
+	date dob;
+	int age;
+	int nid;
+
+};
+
+person::person(char* a, char* a1, int b, int c, int d, int e, int f)
+{
+	name pname(a, a1);
+	pname.setvalue(a, a1);
+	age = b;
+	nid = c;
+	dob = (d, e, f);
+	dob.setvalue(d, e, f);
+}
+
+person::~person()
+{
+}
+class customer :public person
+{
+public:
+	customer(char* = nullptr, char* = nullptr, int = 0, int = 0, int = 0, int = 0, int = 0, int = 0);
+	~customer();
+private:
+	int cid;
+	service** booking_history;
+	friend void outcustomer();
+};
+customer::customer(char* a, char* a1, int b, int c, int d, int e, int f, int x) :person(a, a1, b, c, d, e, f)
+{
+	cid = x;
+	ofstream in;
+	in.open("customer.txt", ios::app);
+	in << "Name :" << a << " " << a1 << "/" << "Customer id :" << cid << "/" << "Date of Birth :";
+	in << dob << "/" << "CNIC number :" << nid << "/" << "age :" << age << "\n";
+	in.close();
+}
+void outcustomer()
+{
+	string st;
+	ifstream out;
+	char** ary;
+	ary = new char* [500];
+	for (int i = 0; i < 500; i++)
+	{
+		ary[i] = new char[500];
+	}
+	cout << "List of all customer \n";
+	out.open("customer.txt", ios::app);
+	int k = 0;
+	while (!out.eof())
+	{
+		getline(out, st);
+		for (int i = 0; st[i] != '\0'; i++) {
+			ary[k][i] = st[i];
+		}
+		k++;
+		if (out.eof())
+			break;
+
+	}
+	k = k - 1;
+	for (int i = 0; i < k; i++)
+	{
+		for (int j = 0; ary[i][j] != '/' && ary[i][j] != '\0'; j++)
+		{
+			cout << ary[i][j];
+		}
+		cout << endl;
+
+	}
+	out.close();
+}
+customer::~customer()
+{
+}
+class driver
+{
+protected:
+	string d_id;
+	string nm;
+	char** licence_list;
+	int no_licence;
+	float overall_ranking;
+	float salary;
+	float experience;
+	int status;
+	service** service_history;
+public:
+	driver(string = NULL, string = NULL, float = 0, float = 0, float = 0, int = 0);
+	driver(driver&);
+	void setvalue(string, char**, int, int, float, float, float, int);
+	void getvalue();
+	friend void outdriver();
+	friend void removedriver();
+	friend void driver_rank();
+	friend void mult_licn();
+	friend void avaliabledriver();
+	friend void bookdriver(int);
+	friend ostream& operator << (ostream& out, const driver& obj);
+	~driver();
+};
+driver::driver(string h, string b, float d, float e, float f, int g)
+{
+	licence_list = new char* [3];
+	for (int i = 0; i < 3; i++)
+	{
+		licence_list[i] = new char[10];
+	}
+	for (int i = 0; i < 3; i++)
+		d_id = b;
+	cout << "Enter no of licence (Enter 1 if have only one licence and 2 if have both licence:";
+	cin >> no_licence;
+	if (no_licence == 1)
+	{
+		int local_res = 0;
+		cout << "Press 1 for learner and license light vehicle \n" << "Press 2 for learnerand license heavy vehicle" << endl;
+		cin >> local_res;
+		if (local_res == 1)
+		{
+			int k = 0;
+			string res1 = "Light vehicle";
+			for (int i = 0; i < res1.length(); i++)
+			{
+				licence_list[0][i] = res1[i];
+				k++;
+			}
+			licence_list[0][k] = '\0';
+		}
+		else
+		{
+			int k = 0;
+			string res1 = "Heavy vehicle";
+			for (int i = 0; i < res1.length(); i++)
+			{
+				licence_list[0][i] = res1[i];
+				k++;
+			}
+			licence_list[0][k] = '\0';
+		}
+	}
+	if (no_licence != 1)
+	{
+		int k = 0;
+		string res1 = "Both licenses";
+		for (int i = 0; i < res1.length(); i++)
+		{
+			licence_list[0][i] = res1[i];
+			k++;
+		}
+		licence_list[0][k] = '\0';
+		/*for (int i = 0; i < 2; i++)
+		{
+			for (int j = 0; j < 2; j++)
+				cin >> licence_list[i][j];
+		}*/
+	}
+	overall_ranking = d;
+	salary = e;
+	experience = f;
+	status = g;
+	nm = h;
+	ofstream in;
+	in.open("driver.txt", ios::app);
+	in << "driver id :" << d_id << "/" << "no of licence :" << no_licence << "/" << "overall ranking :";
+	in << overall_ranking << "/" << "salary :" << salary << "/" << "experience :" << experience;
+	in << "/" << "status :" << status << "/" << "name :" << nm << "Licence list :";
+	for (int i = 0; licence_list[0][i] != '\0'; i++) {
+		in << licence_list[0][i];
+	}
+	in << "\n";
+	in.close();
+
+}
+
+driver::driver(driver& obj) {
+	/*licence_list = new char* [3];
+	for (int i = 0; i < 3; i++)
+	{
+		licence_list[i] = new char[50];
+	}
+	for (int i = 0; i < 5; i++)
+	{
+		for (int j = 0; j < 50; j++)
+		{
+			licence_list[i][j] = obj.licence_list[i][j];
+		}
+	}*/
+	d_id = obj.d_id;
+	no_licence = obj.no_licence;
+	overall_ranking = obj.overall_ranking;
+	salary = obj.salary;
+	experience = obj.experience;
+	status = obj.status;
+	nm = obj.nm;
+}
+void driver::setvalue(string h, char** a, int b, int c, float d, float e, float f, int g) {
+	/*licence_list = new char* [3];
+	for (int i = 0; i < 3; i++)
+	{
+		licence_list[i] = new char[50];
+	}
+	for (int i = 0; i < 3; i++)
+	{
+		for (int j = 0; j < 10; j++)
+		{
+			licence_list[i][j] = a[i][j];
+		}
+	}*/
+	d_id = b;
+	no_licence = c;
+	overall_ranking = d;
+	salary = e;
+	experience = f;
+	status = g;
+	nm = h;
+}
+void driver::getvalue() {
+	cout << "licence list :";
+	/*for (int i = 0; i < 3; i++)
+	{
+		for (int j = 0; j < 10; j++)
+		{
+			cout<<licence_list[i][j] <<" ";
+		}
+		cout << "       ";
+	}*/
+	cout << "Driver id :" << d_id << "No of licence :" << no_licence << "Overall ranking :" << overall_ranking;
+	cout << "Driver Salary :" << salary << "Driver experience :" << experience << "Driver status :" << status;
+}
+ostream& operator << (ostream& out, const driver& obj) {
+	/*out << "licence list :";
+	for (int i = 0; i < 3; i++)
+	{
+		for (int j = 0; j < 10; j++)
+		{
+			out << obj.licence_list[i][j] << " ";
+		}
+		out << "       ";
+	}*/
+	out << "Driver id :" << obj.d_id << "No of licence :" << obj.no_licence << "Overall ranking :" << obj.overall_ranking;
+	out << "Driver Salary :" << obj.salary << "Driver experience :" << obj.experience << "Driver status :" << obj.status;
+	return out;
+}
+void outdriver()
+{
+	char** ary;
+	ary = new char* [500];
+	for (int i = 0; i < 500; i++)
+	{
+		ary[i] = new char[500];
+	}
+	string st;
+	ifstream out;
+	cout << "List of all driver\n";
+	out.open("driver.txt", ios::app);
+	int i, l = 0;
+	while (!out.eof())
+	{
+		getline(out, st);
+		//cout << st << endl;
+		for (i = 0; st[i] != '\0'; i++)
+		{
+			if (st[i] == '/')
+				cout << " :";
+			else
+				cout << st[i];
+		}
+		cout << endl;
+	}
+	/*l = l - 1;
+	for (int j = 0; j < l;j++)
+	{
+		for (int k = 0;ary[j][k] != '\0'; k++)
+		{
+			cout << ary[j][k];
+		}
+		cout << endl;
+
+	}*/
+	out.close();
+}
+void removedriver() {
+
+	string a;
+	int ch;
+	int len;
+	while (1) {
+		cout << "Enter driver id :";
+		cin >> a;
+		len = a.length();
+		if (len == 5)
+			break;
+		cout << "Enter vaid id\n";
+	}
+	int line = 0;
+	string st;
+	ifstream out;
+	out.open("driver.txt");
+	int j = 0;
+	while (!out.eof())
+	{
+		j++;
+		getline(out, st);
+		if (st[0] != '\0') {
+			ch = 0;
+			for (int i = 11, j = 0; i < 16, j < 5; i++, j++)
+			{
+				if (st[i] == a[j])
+					ch++;
+			}
+			if (ch == 5)
+			{
+				line = j;
+				break;
+			}
+		}
+	}
+	out.close();
+	//	cout << line;
+	if (line != 0) {
+		ifstream out("driver.txt");
+		ofstream in;
+		in.open("temp.txt", ofstream::out);
+		char c;
+		int line_no = 1;
+		while (out.get(c))
+		{
+			if (c == '\n')
+				line_no++;
+			if (line_no != line)
+				in << c;
+		}
+		in.close();
+		out.close();
+		remove("driver.txt");
+		rename("temp.txt", "driver.txt");
+		cout << "Driver removed\n";
+	}
+	else
+		cout << "no driver found\n";
+}
+void driver_rank() {
+	int cnt = 0;
+	int m = 0;
+	cout << "list of all drivers who have ranking 4.5 + . \n";
+	string st;
+	char** r;
+	char** dm;
+	dm = new char* [500];
+	for (int i = 0; i < 50; i++)
+	{
+		dm[i] = new char[50];
+	}
+	int q = 0;
+	r = new char* [500];
+	for (int i = 0; i < 50; i++) {
+		r[i] = new char[50];
+	}
+
+	ifstream out;
+	out.open("driver.txt", ios::app);
+	int l = 0;
+	int j = 0;
+	int a = 0;
+	while (!out.eof())
+	{
+		getline(out, st);
+		cnt = 0;
+		m = 0;
+		for (int i = 0; st[i] != '\0'; i++) {
+			dm[a][i] = st[i];
+
+		}
+		a++;
+		//cout << st << endl;
+		for (int i = 0; st[i] != '\0'; i++)
+		{
+			if (st[i] == '/')
+			{
+				cnt++;
+			}
+			if (cnt >= 2 && cnt < 3 && st[i] != '\0')
+			{
+				for (int k = 0; k < 1; k++, m++)
+				{
+					r[j][m] = st[i];
+					//cout << st[i];
+					//cout << r[j][k];
+				}
+				l++;
+			}
+			/*cout <<"\n" << cnt<<endl;*/
+			r[j][m] = '\0';
+		}
+		j++;
+
+	}
+	out.close();
+	int g;
+	cout << endl;
+	for (int i = 0; i < j - 1; i++)
+	{
+		int g = 0;
+		for (int k = 1; r[i][k] != '\0'; k++)
+		{
+
+			if (r[i][18] == '5' || r[i][20] == '6' || r[i][20] == '7' || r[i][20] == '8' || r[i][20] == '9')
+			{
+
+				for (; g < 1; g++)
+				{
+					for (int h = 0; dm[i][h] != '/'; h++)
+					{
+						cout << dm[i][h];
+
+					}
+					cout << "  ;  ";
+				}
+				cout << r[i][k];
+
+			}
+
+
+
+		}
+		cout << endl;
+
+	}
+}
+void avaliabledriver() {
+
+	cout << "Avaliable drivers . \n";
+	string st;
+	char** r;
+	char** dm;
+	dm = new char* [500];
+	for (int i = 0; i < 50; i++)
+	{
+		dm[i] = new char[50];
+	}
+	r = new char* [500];
+	for (int i = 0; i < 50; i++) {
+		r[i] = new char[50];
+	}
+	char** newary;
+	newary = new char* [500];
+	for (int i = 0; i < 50; i++) {
+		newary[i] = new char[50];
+	}
+	ifstream out;
+	out.open("driver.txt", ios::app);
+	int l1 = 0;
+	int cnt = 0;
+	int m = 0;
+	int q = 0;
+	int l = 0;
+	int j = 0;
+	int j1 = 0;
+	int m1 = 0;
+	int a = 0;
+	while (!out.eof())
+	{
+		getline(out, st);
+		if (st[0] != '\0') {
+			cnt = 0;
+			m = 0;
+			m1 = 0;
+			for (int i = 0; st[i] != '\0'; i++) {
+				dm[a][i] = st[i];
+
+			}
+			a++;
+			//cout << st << endl;
+			for (int i = 0; st[i] != '\0'; i++)
+			{
+				if (st[i] == '/')
+				{
+					cnt++;
+				}
+				if (cnt >= 2 && cnt < 3 && st[i] != '\0')
+				{
+					for (int k = 0; k < 1; k++, m1++)
+					{
+						newary[j1][m1] = st[i];
+
+					}
+					l1++;
+				}
+				if (cnt >= 5 && cnt < 6 && st[i] != '\0')
+				{
+					for (int k = 0; k < 1; k++, m++)
+					{
+						r[j][m] = st[i];
+						//cout << st[i];
+						//cout << r[j][k];
+					}
+					l++;
+				}
+				/*cout <<"\n" << cnt<<endl;*/
+				r[j][m] = '\0';
+				newary[j1][m1] = '\0';
+			}
+		}
+			j++, j1++;
+		
+	}
+	out.close();
+	int g;
+	cout << endl;
+	for (int i = 0; i < j - 1; i++)
+	{
+		int g = 0;
+		for (int k = 1; r[i][k] != '\0'; k++)
+		{
+
+			/*cout << r[i][9];*/
+
+			if (r[i][9] == '1' || r[i][9] == '3')
+			{
+
+				for (; g < 1; g++)
+				{
+					for (int h = 0; dm[i][h] != '/'; h++)
+					{
+						cout << dm[i][h];
+
+					}
+					cout << "  ;  ";
+				}
+				for (; g < 2; g++) {
+					for (int k = 1; newary[i][k] != '\0'; k++)
+						cout << newary[i][k];
+				}
+
+			}
+
+		}
+		cout << endl;
+
+	}
+}
+void mult_licn() {
+	int cnt = 0;
+	int m = 0;
+	string st;
+	char** r;
+	char** dm;
+	dm = new char* [500];
+	for (int i = 0; i < 50; i++)
+	{
+		dm[i] = new char[50];
+	}
+	int q = 0;
+	r = new char* [500];
+	for (int i = 0; i < 50; i++) {
+		r[i] = new char[50];
+	}
+
+	ifstream out;
+	out.open("driver.txt", ios::app);
+	int l = 0;
+	int j = 0;
+	int a = 0;
+	while (!out.eof())
+	{
+		getline(out, st);
+		cnt = 0;
+		m = 0;
+		for (int i = 0; st[i] != '\0'; i++) {
+			dm[a][i] = st[i];
+
+		}
+		a++;
+		//cout << st << endl;
+		for (int i = 0; st[i] != '\0'; i++)
+		{
+			if (st[i] == '/')
+			{
+				cnt++;
+			}
+			if (cnt >= 1 && cnt < 2 && st[i] != '\0')
+			{
+				for (int k = 0; k < 1; k++, m++)
+				{
+					r[j][m] = st[i];
+					//cout << st[i];
+					//cout << r[j][k];
+				}
+				l++;
+			}
+			/*cout <<"\n" << cnt<<endl;*/
+			r[j][m] = '\0';
+		}
+		j++;
+
+	}
+	out.close();
+	int g;
+	cout << endl;
+	for (int i = 0; i < j - 1; i++)
+	{
+		int g = 0;
+		for (int k = 1; r[i][k] != '\0'; k++)
+		{
+			//cout << r[i][16];
+			if (r[i][16] != '1')
+			{
+				for (; g < 1; g++)
+				{
+					for (int h = 0; dm[i][h] != '/'; h++)
+					{
+						cout << dm[i][h];
+
+					}
+					cout << "  ;  ";
+				}
+
+				cout << r[i][k];
+
+			}
+		}
+		cout << endl;
+	}
+}
+void bookdriver(int a1) {
+	ostringstream str1;
+	str1 << a1;
+	string a = str1.str();
+	//cout << a << endl;
+	string nary;
+	int ch = 0;
+	int line = 0;
+	string st;
+	ifstream out;
+	out.open("driver.txt");
+	int j = 0;
+	while (!out.eof())
+	{
+		j++;
+		getline(out, st);
+		if (st[0] != '\0') {
+			ch = 0;
+			for (int i = 11, j = 0; i < 16, j < 5; i++, j++)
+			{
+				//	cout << st[i];
+				if (st[i] == a[j])
+					ch++;
+			}
+			if (ch == 5)
+			{
+				nary = st;
+				line = j;
+				break;
+			}
+		}
+	}
+	out.close();
+	//cout <<"hlo" << nary << endl;
+	 cout << line;
+	int g = 0;
+	for (int i = 0; nary[i] != '\0'; i++) {
+		if (nary[i] == '/')
+			g++;
+		if (g == 5)
+		{
+			/*cout << "word :" <<*/
+			nary[i + 9] = '2';
+			cout << nary[i + 9];
+			/*cout << endl << i << endl;*/
+			break;
+		}
+	}
+//	cout << nary;
+	if (line != 0) {
+		ifstream out("driver.txt");
+		ofstream in;
+		in.open("temp.txt", ofstream::out);
+		char c;
+		int line_no = 1;
+		while (out.get(c))
+		{
+			if (c == '\n')
+				line_no++;
+			if (line_no != line)
+				in << c;
+		}
+		in.close();
+		out.close();
+		remove("driver.txt");
+		rename("temp.txt", "driver.txt");	
+	}
+	ofstream in;
+	in.open("driver.txt", ios::app);
+	in << nary<< "\n";
+	in.close();
+	out.close();
+		cout << line;
+	if (line != 0) {
+		ifstream out("driver.txt");
+		ofstream in;
+		in.open("temp.txt", ofstream::out);
+		char c;
+		int line_no = 1;
+		while (out.get(c))
+		{
+			if (c == '\n')
+				line_no++;
+			if (line_no != line)
+				in << c;
+		}
+		in.close();
+		out.close();
+		remove("driver.txt");
+		rename("temp.txt", "driver.txt");
+	}
+	ofstream inn;
+	inn.open("driver.txt", ios::app);
+	inn<< nary << "\n";
+	inn.close();
+}
+driver::~driver()
+{
+	/*for (int i = 0; i<3; i++)
+	{
+		delete[]licence_list[10];
+	}
+	delete[]licence_list;*/
+}
+class feature
+{
+public:
+	feature(char* = nullptr, int = 0, int = 0);
+	void getvalue();
+	~feature();
+
+private:
+	int f_id;
+	char* description;
+	float cost;
+};
+
+feature::feature(char* a, int b, int c)
+{
+	f_id = b;
+	cost = c;
+	description = new char[50];
+	for (int i = 0; i < 50; i++)
+	{
+		description[i] = a[i];
+	}
+}
+void feature::getvalue() {
+	cout << description << " " << f_id << " " << cost;
+}
+feature::~feature()
+{
+}
+class vehicle :public date
+{
+public:
+
+	vehicle(string = NULL, int = 0, float = 0, float = 0, bool = 0, char* = nullptr, char* = nullptr, int = 0, int = 0, int = 0, string = NULL, string = NULL);
+	friend void vehicleout();
+	friend void availablevehicle();
+	friend void bookvehicle(int);
+	friend void removevehicle();
+	~vehicle();
+private:
+	string category;
+	string v_id;
+	string vname;
+	int registration;
+	float avg_mileag;
+	char* licence_type;
+	bool status;
+	char* fuel_type;
+	float overall_ranking;
+	date manuf_date;
+	feature* list;
+	service** service_history;
+};
+vehicle::vehicle(string a, int b, float c, float d, bool e, char* f, char* g, int h, int i, int j, string l, string m)
+{
+	category = m;
+	v_id = a;
+	vname = l;
+	registration = b;
+	avg_mileag = c;
+	status = e;
+	overall_ranking = d;
+	manuf_date.setvalue(h, i, j);
+	licence_type = new char[50];
+	fuel_type = new char[50];
+	for (int i = 0; i < 50; i++)
+	{
+		licence_type[i] = f[i];
+	}
+	for (int i = 0; i < 50; i++)
+	{
+		fuel_type[i] = g[i];
+	}
+	ofstream in;
+	in.open("vehicle.txt", ios::app);
+	in << "vehicle id :" << v_id << "/" << "vehicle name :" << vname << "/" << "Category :" << category << "/" << "overall ranking :";
+	in << overall_ranking << "/" << "registration no :" << registration << "/" << "average mileage :" << avg_mileag;
+	in << "/" << "status :" << status << "/" << "Date of manufacture :" << manuf_date << "\n";
+	in.close();
+
+}
+void vehicleout() {
+	//char** ary;
+	//cout << "\n";
+	//ary = new char* [500];
+	//for (int i = 0; i < 500; i++)
+	//{
+	//	ary[i] = new char[500];
+	//}
+	//string st;
+	//ifstream out;
+	//cout << "List of all vehicle\n";
+	//out.open("vehicle.txt", ios::app);
+	//int i, l = 0;
+	//while (!out.eof())
+	//{
+	//	getline(out, st);
+	//	//cout << st << endl;
+	//	for (i = 0; st[i] != '\0'; i++)
+	//	{
+	//		if (st[i] == '/')
+	//			cout << " :";
+	//		else
+	//			cout << st[i];
+	//	}
+	//	cout << endl;
+	//}
+
+
+	string st;
+	char** r;
+	char** dm;
+	dm = new char* [500];
+	for (int i = 0; i < 50; i++)
+	{
+		dm[i] = new char[50];
+	}
+	r = new char* [500];
+	for (int i = 0; i < 50; i++) {
+		r[i] = new char[50];
+	}
+	char** newary;
+	newary = new char* [500];
+	for (int i = 0; i < 50; i++) {
+		newary[i] = new char[50];
+	}
+	ifstream out;
+	out.open("vehicle.txt", ios::app);
+	int l1 = 0;
+	int cnt = 0;
+	int m = 0;
+	int q = 0;
+	int l = 0;
+	int j = 0;
+	int j1 = 0;
+	int m1 = 0;
+	int a = 0;
+	while (!out.eof())
+	{
+		getline(out, st);
+		cnt = 0;
+		m = 0;
+		m1 = 0;
+		for (int i = 0; st[i] != '\0'; i++) {
+			dm[a][i] = st[i];
+
+		}
+		a++;
+		//cout << st << endl;
+		for (int i = 0; st[i] != '\0'; i++)
+		{
+			if (st[i] == '/')
+			{
+				cnt++;
+			}
+			if (cnt >= 2 && cnt < 3 && st[i] != '\0')
+			{
+				for (int k = 0; k < 1; k++, m1++)
+				{
+					newary[j1][m1] = st[i];
+
+				}
+				l1++;
+			}
+			if (cnt >= 6 && cnt < 7 && st[i] != '\0')
+			{
+				for (int k = 0; k < 1; k++, m++)
+				{
+					r[j][m] = st[i];
+					//cout << st[i];
+					//cout << r[j][k];
+				}
+				l++;
+			}
+			/*cout <<"\n" << cnt<<endl;*/
+			r[j][m] = '\0';
+			newary[j1][m1] = '\0';
+		}
+		j++, j1++;
+
+	}
+	out.close();
+	int g;
+	cout << endl;
+	int vhchech;
+	for (int i = 0; i < j - 1; i++)
+	{
+		int g = 0, vhcheck = 0;
+		for (int k = 1; r[i][k] != '\0'; k++)
+		{
+
+			/*cout << r[i][9];*/
+
+			if (r[i][9] == '0' || r[i][9] == '1' || r[i][9] == '2')
+			{
+
+				for (; g < 1; g++)
+				{
+					for (int h = 0; vhcheck < 2; h++)
+					{
+						if (dm[i][h] == '/')
+						{
+							vhcheck++;
+							cout << " ; ";
+						}
+						else
+							cout << dm[i][h];
+					}
+					//cout << "  ;  ";
+				}
+				for (; g < 2; g++) {
+					for (int k = 1; newary[i][k] != '\0'; k++)
+						cout << newary[i][k];
+				}
+
+			}
+
+		}
+		cout << endl;
+
+	}
+}
+void availablevehicle() {
+
+
+
+
+	string st;
+	char** r;
+	char** dm;
+	dm = new char* [500];
+	for (int i = 0; i < 50; i++)
+	{
+		dm[i] = new char[50];
+	}
+	r = new char* [500];
+	for (int i = 0; i < 50; i++) {
+		r[i] = new char[50];
+	}
+	char** newary;
+	newary = new char* [500];
+	for (int i = 0; i < 50; i++) {
+		newary[i] = new char[50];
+	}
+	ifstream out;
+	out.open("vehicle.txt", ios::app);
+	int l1 = 0;
+	int cnt = 0;
+	int m = 0;
+	int q = 0;
+	int l = 0;
+	int j = 0;
+	int j1 = 0;
+	int m1 = 0;
+	int a = 0;
+	while (!out.eof())
+	{
+		getline(out, st);
+		cnt = 0;
+		m = 0;
+		m1 = 0;
+		for (int i = 0; st[i] != '\0'; i++) {
+			dm[a][i] = st[i];
+
+		}
+		a++;
+		//cout << st << endl;
+		for (int i = 0; st[i] != '\0'; i++)
+		{
+			if (st[i] == '/')
+			{
+				cnt++;
+			}
+			if (cnt >= 2 && cnt < 3 && st[i] != '\0')
+			{
+				for (int k = 0; k < 1; k++, m1++)
+				{
+					newary[j1][m1] = st[i];
+
+				}
+				l1++;
+			}
+			if (cnt >= 6 && cnt < 7 && st[i] != '\0')
+			{
+				for (int k = 0; k < 1; k++, m++)
+				{
+					r[j][m] = st[i];
+					//cout << st[i];
+					//cout << r[j][k];
+				}
+				l++;
+			}
+			/*cout <<"\n" << cnt<<endl;*/
+			r[j][m] = '\0';
+			newary[j1][m1] = '\0';
+		}
+		j++, j1++;
+
+	}
+	out.close();
+	int g;
+	cout << endl;
+	int vhchech;
+	for (int i = 0; i < j - 1; i++)
+	{
+		int g = 0, vhcheck = 0;
+		for (int k = 1; r[i][k] != '\0'; k++)
+		{
+
+			/*cout << r[i][9];*/
+
+			if (r[i][9] == '0')
+			{
+
+				for (; g < 1; g++)
+				{
+					for (int h = 0; vhcheck < 2; h++)
+					{
+						if (dm[i][h] == '/')
+						{
+							vhcheck++;
+							cout << " ; ";
+						}
+						else
+							cout << dm[i][h];
+					}
+					//cout << "  ;  ";
+				}
+				for (; g < 2; g++) {
+					for (int k = 1; newary[i][k] != '\0'; k++)
+						cout << newary[i][k];
+				}
+
+			}
+
+		}
+		cout << endl;
+
+	}
+}
+void removevehicle() {
+
+	string a;
+	int ch;
+	int len;
+	while (1) {
+		cout << "Enter driver id :";
+		cin >> a;
+		len = a.length();
+		if (len == 5)
+			break;
+		cout << "Enter vaid id\n";
+	}
+	int line = 0;
+	string st;
+	ifstream out;
+	out.open("vehicle.txt");
+	int j = 0;
+	while (!out.eof())
+	{
+		j++;
+		getline(out, st);
+		if (st[0] != '\0')
+		{
+			ch = 0;
+			for (int i = 12, j = 0; i < 17, j < 5; i++, j++)
+			{
+				if (st[i] == a[j])
+					ch++;
+			}
+			if (ch == 5)
+			{
+				line = j;
+				break;
+			}
+		}
+	}
+	out.close();
+	//	cout << line;
+	if (line != 0) {
+		ifstream out("vehicle.txt");
+		ofstream in;
+		in.open("temp.txt", ofstream::out);
+		char c;
+		int line_no = 1;
+		while (out.get(c))
+		{
+			if (c == '\n')
+				line_no++;
+			if (line_no != line)
+				in << c;
+		}
+		in.close();
+		out.close();
+		remove("vehicle.txt");
+		rename("temp.txt", "vehicle.txt");
+		cout << "vehicle removed\n";
+	}
+	else
+		cout << "no vehicle found\n";
+}
+
+void bookvehicle(int a1) {
+	ostringstream str1;
+	str1 << a1;
+	string a = str1.str();
+	//cout << a << endl;
+	//char* nary = new char[500];
+	string nary;
+	int line = 0;
+	int ch;
+	string st;
+	ifstream out;
+	out.open("vehicle.txt", ios::app);
+	int j = 0;
+	while (!out.eof())
+	{
+		j++;
+		getline(out, st);
+		if (st[0] != '\0')
+		{
+			/*out.getline(nary, 160);
+			cout << nary;*/
+			ch = 0;
+			for (int i = 12, j = 0; i < 17, j < 5; i++, j++)
+			{
+				if (st[i] == a[j])
+					ch++;
+			}
+			if (ch == 5)
+			{
+				nary = st;
+				line = j;
+				break;
+			}
+		}
+	}
+	out.close();
+       // cout << nary<<endl;
+		//cout << line;
+	int g = 0;
+	for (int i = 0; nary[i] != '\0'; i++) {
+		if (nary[i] == '/')
+			g++;
+		if (g == 6)
+		{
+			/*cout << "word :" <<*/
+			nary[i + 9] = '1';
+			cout << nary[i + 9];
+			/*cout << endl << i << endl;*/
+			break;
+		}
+	}
+	//cout << nary;
+	if (line != 0) {
+		ifstream out("vehicle.txt");
+		ofstream in;
+		in.open("temp.txt", ofstream::out);
+		char c;
+		int line_no = 1;
+		while (out.get(c))
+		{
+			if (c == '\n')
+				line_no++;
+			if (line_no != line)
+				in << c;
+		}
+		in.close();
+		out.close();
+		remove("vehicle.txt");
+		rename("temp.txt", "vehicle.txt");	
+	}
+	ofstream in;
+	in.open("vehicle.txt", ios::app);
+	in << nary<< "\n";
+	in.close();
+}
+vehicle::~vehicle()
+{
+}
+int disp() {
+	int st;
+	cout << "          - - - - - - Welcome to transport management system- - - - - -          |\n";
+	cout << "|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|\n";
+	cout << "| 1. Add a new Customer                                                          |\n";
+	cout << "| 2. Add a Driver                                                                |\n";
+	cout << "| 3. Remove a Driver                                                             |\n";
+	cout << "| 4. Add a Vehicle                                                               |\n";
+	cout << "| 5. Remove a Vehicle                                                            |\n";
+	cout << "| 6. Print List of All Customers                                                 |\n";
+	cout << "| 7. Print List of All drivers                                                   |\n";
+	cout << "| 8. Print complete list of vehicles with details by their category.             |\n";
+	cout << "| 9. Print details and service history of a vehicle (Provide vehicle ID)         |\n";
+	cout << "| 10. Print history of a customer, (Provide customer ID)                         |\n";
+	cout << "| 11. Print history of a driver including services. (Provide driver ID)          |\n";
+	cout << "| 12. Print list of all drivers who have ranking 4.5+.                           |\n";
+	cout << "| 13. Print list of all drivers have multiple licenses.                          |\n";
+	cout << "| 14. Print updated salary of all drivers.                                       |\n";
+	cout << "| 15. Add a Service request(ride or delivery)                                    |\n";
+	cout << "| 16. Cancel a service                                                           |\n";
+	cout << "| 17. Complete a service(Provide service ID)                                     |\n";
+	cout << "| 18. Print details of all Customers, who used the same vehicle.                 |\n";
+	cout << "| 19. Print the List of all Drivers who completed delivery services on same days.|\n";
+	cout << "| 20. Print details of all pending services of a particular driver.              |\n";
+	cout << "| 21. Print details of all canceled services by a customer.                      |\n";
+	cout << "| 22. Press any other button to exit the program.                                |\n";
+	cout << "|================================================================================|\n";
+	cin >> st;
+	if (st > 22 || st < 1)
+		st = 0;
+	return st;
+}
+int main() {
+	while (1) {
+		int stat = disp();
+		system("cls");
+		if (stat != 0)
+		{
+			if (stat == 1)
+			{
+				int id, d, m, y, cn;
+				char* n1 = new char[50];
+				char* n2 = new char[50];
+				cout << "Enter customer id\n";
+				cin >> id;
+				cout << "Enter customer name\nEnter first name ";
+				cin >> n1;
+				cout << "Enter last name ";
+				cin >> n2;
+				while (1) {
+					cout << "Enter Date of Birth( Note :date<32,month<13,year <2022 \nEnter day ";
+					cin >> d;
+					if (d > 0 && d < 32)
+						break;
+					else
+						cout << "Invlid day\n";
+				}
+				while (1) {
+					cout << "Enter month ";
+					cin >> m;
+					if (m > 0 && m < 13)
+						break;
+					else
+						cout << "Invlid month\n";
+				}
+				while (1) {
+					cout << "Enter year ";
+					cin >> y;
+					if (y > 0 && y < 2022)
+						break;
+					else
+						cout << "Invlid month\n";
+				}
+				cout << "Enter CNIC number ";
+				cin >> cn;
+				cout << "Enter yout age ";
+				int ag;
+				cin >> ag;
+				customer obj(n1, n2, ag, cn, d, m, y, id);
+				name obj1(n1, n2);
+				obj1.setvalue(n1, n2);
+				cout << "Customer sdded  successfully\n";
+				cout << "\n                  press any key to continue\n";
+				char ay;
+				cin >> ay;
+			}
+			if (stat == 2)
+			{
+				/*	int d_id;
+					char** licence_list;
+					int no_licence;
+					float overall_ranking;
+					float salary;
+					float experience;
+					int status;*/
+				string n;
+				string did;
+				float nol, ovlran, sal, exp, st;
+				cout << "Enter driver name\n";
+				cin >> n;
+				while (1) {
+					int len;
+					cout << "Enter driver id (id must be of 5 numbers):";
+					cin >> did;
+					len = did.length();
+					if (len == 5)
+						break;
+				}
+				while (1) {
+					cout << "Enter driver overall ranking (Between 0  to  5):";
+					cin >> ovlran;
+					if (ovlran <= 5 && ovlran >= 0)
+						break;
+				}
+				cout << "Enter driver salary :";
+				cin >> sal;
+				cout << "Enter driver experience (In years):";
+				cin >> exp;
+				cout << "Enter driver status (1 for free 2 if booked 3 if cancelled ):";
+				cin >> st;
+				cout << "Enter licence type (small vehicle ,Heavy vehicle ,Both small and Heavy vehicle)";
+				driver obj(n, did, ovlran, sal, exp, st);
+				cout << "Driver added successfully\n";
+				cout << "\n                  press any key to continue\n";
+				char ay;
+				cin >> ay;
+			}
+			if (stat == 3)
+			{
+				removedriver();
+				cout << "\n                  press any key to continue\n";
+				char ay;
+				cin >> ay;
+			}
+			if (stat == 4)
+			{
+				/*int v_id;
+				int registration;
+				float avg_mileag;
+				char* licence_type;
+				bool status;
+				char* fuel_type;
+				float overall_ranking;
+				date manuf_date;
+				feature* list;*/
+				char* a, * b;
+				string catg;
+				string nam;
+				string vhid;
+				a = new char[50];
+				b = new char[50];
+				int d, y, m, reg, avg, st;
+				float  ovl;
+				while (1) {
+					int len;
+					cout << "Enter vehicle id (id must be of 5 numbers):";
+					cin >> vhid;
+					len = vhid.length();
+					if (len == 5)
+						break;
+				}
+				cout << "Enter vehicle category (Small,Heavy)\n";
+				cin >> catg;
+				cout << "ENter vehicle name :";
+				cin >> nam;
+				cout << "Enter licence type (small vehicle ,large vehilce):";
+				cin >> a;
+				cout << "Enter fuel type :";
+				cin >> b;
+				cout << "Enter registration no ;";
+				cin >> reg;
+				cout << "Enter average mileag :";
+				cin >> avg;
+				cout << "Enter ststus (0 and 1 only 0 for free and 1 for booked):";
+				cin >> st;
+				while (1) {
+					cout << "Enter overall ranking :";
+					cin >> ovl;
+					if (ovl <= 5 && ovl > 0)
+						break;
+				}
+				while (1)
+				{
+					cout << "Enter manufacture Date( Note :date<32,month<13,year <2022 \nEnter day ";
+					cin >> d;
+					if (d > 0 && d < 32)
+						break;
+					else
+						cout << "Invlid day\n";
+				}
+				while (1) {
+					cout << "Enter month ";
+					cin >> m;
+					if (m > 0 && m < 13)
+						break;
+					else
+						cout << "Invlid month\n";
+				}
+				while (1)
+				{
+					cout << "Enter year ";
+					cin >> y;
+					if (y > 0 && y < 2022)
+						break;
+					else
+						cout << "Invlid month\n";
+				}
+				vehicle(vhid, reg, avg, ovl, st, a, b, d, y, m, nam, catg);
+				cout << "vehilve added successfully\n";
+				cout << "\n                  press any key to continue\n";
+				char ay;
+				cin >> ay;
+
+			}
+			if (stat == 5)
+			{
+				removevehicle();
+				cout << "\n                  press any key to continue\n";
+				char ay;
+				cin >> ay;
+			}
+			if (stat == 6)
+			{
+				outcustomer();
+				cout << "\n                  press any key to continue\n";
+				char ay;
+				cin >> ay;
+			}
+			if (stat == 7)
+			{
+				outdriver();
+				cout << "\n                  press any key to continue\n";
+				char ay;
+				cin >> ay;
+			}
+			if (stat == 8)
+			{
+				vehicleout();
+				cout << "\n                  press any key to continue\n";
+				char ay;
+				cin >> ay;
+			}
+			if (stat == 9) {
+				cout << "Enter vecihle id to get service history\n";
+				int id;
+				cin >> id;
+			}
+			if (stat == 10) {
+				cout << "\n                  press any key to continue\n";
+				char ay;
+				cin >> ay;
+			}
+			if (stat == 11) {
+				cout << "\n                  press any key to continue\n";
+				char ay;
+				cin >> ay;
+			}
+			if (stat == 12) {
+				driver_rank();
+				cout << "\n                  press any key to continue\n";
+				char ay;
+				cin >> ay;
+
+			}
+			if (stat == 13)
+			{
+				cout << "list of all drivers have multiple licenses.\n";
+				mult_licn();
+				cout << "\n                  press any key to continue\n";
+				char ay;
+				cin >> ay;
+			}
+			if (stat == 14)
+			{
+				cout << "\n                  press any key to continue\n";
+				char ay;
+				cin >> ay;
+			}
+			if (stat == 15) {
+
+				//char* source;
+				//char* destination;
+				//char* distance;
+				//date booking_date;
+				//mtime booking_time;
+				//bool status;
+				//float fuelrate;
+				//int c_id;//customer,vehicle and driver id;
+				//int v_id;
+				//int d_id;
+				int y, m, d,min,h,s;
+				int cusid;
+				cout << "Enter your registered id \n";
+				cin >> cusid;
+				while (1)
+				{
+					cout << "Enter Booking Time ( Note :hour<13,minutes<61,second <61 \nEnter hour ";
+					cin >> h;
+					if (h > 0 && h < 13)
+						break;
+					else
+						cout << "Invlid hour\n";
+				}
+				while (1) {
+					cout << "Enter minutes ";
+					cin >> min;
+					if (min > 0 && min < 61)
+						break;
+					else
+						cout << "Invlid minutes\n";
+				}
+				while (1)
+				{
+					cout << "Enter second ";
+					cin >> s;
+					if (s > 0 && s < 61)
+						break;
+					else
+						cout << "Invlid second\n";
+				}
+				while (1)
+				{
+					cout << "Enter Booking Date( Note :date<32,month<13,year <2022 \nEnter day ";
+					cin >> d;
+					if (d > 0 && d < 32)
+						break;
+					else
+						cout << "Invlid day\n";
+				}
+				while (1) {
+					cout << "Enter month ";
+					cin >> m;
+					if (m > 0 && m < 13)
+						break;
+					else
+						cout << "Invlid month\n";
+				}
+				while (1)
+				{
+					cout << "Enter year ";
+					cin >> y;
+					if (y > 0 && y < 2022)
+						break;
+					else
+						cout << "Invlid year\n";
+				}
+				int choice;
+				cout << "Enter 1 to book a vehicle for ride\nEnter 2 to book a vehicle for delivery";
+				cin >> choice;
+				int drid;
+				int viid;
+				if (choice == 1) {		
+					int nops;
+					float dis;
+					char* sourc, * destin;
+					sourc = new char[50];
+					int fair;
+					cout << "Enter no of passenger\n";
+					cin >> nops;
+					cout << "Enter distance :";
+					cin >> dis;
+					sourc = new char[50];
+					destin = new char[50];
+					cout << "Enter source\n";
+					cin >> sourc;
+					cout << "Enter destination\n";
+					cin >> destin;
+					int y;
+					cout << "Press 1 if intracity \nPress 2 if out of city\n";
+					cin >> y;
+					avaliabledriver();
+					cout << "Enter driver id to select \n";
+					cin >> drid;
+					cout << "Avaliable vehicles\n";
+					availablevehicle();
+					cout << "Enter vehicle id to select\n";
+					cin >> viid;
+					fair = dis * 100;
+					cout << "your fair is " << fair << endl;
+					ride obj(nops, sourc, destin, dis, cusid, drid, viid, h, min, s, d, m, y);
+				}
+				if (choice == 2) {
+					float dis;
+					char* sourc, * destin;
+					sourc = new char[50];
+					destin = new char[50];
+					int fair;
+					string prd;
+					float prw;
+					sourc = new char[50];
+					cout << "Enter product type\n";
+					cin >> prd;
+					cout << "Enter product weigth \n";
+					cin >> prw;
+					cout << "Enter source\n";
+					cin >> sourc;
+					cout << "Enter destination\n";
+					cin >> destin;
+					cout << "Enter distance :";
+					cin >> dis;
+					int y;
+					cout << "Press 1 if intracity \nPress 2 if out of city\n";
+					cin >> y;
+					avaliabledriver();
+					cout << "Enter driver id to select \n";
+					cin >> drid;
+					cout << "Avaliable vehicles\n";
+					availablevehicle();
+					cout << "Enter vehicle id to select\n";
+					cin >> viid;
+					fair = dis * 100;
+					cout << "your fair is " << fair << endl;
+					delivery obj(prw, prd, sourc, destin, dis, cusid, drid, viid, h, min, s, d, m, y);
+				}
+
+				bookdriver(drid);
+				bookvehicle(viid);
+				y, m, d,min,h,s;
+				cout << "\n                  press any key to continue\n";
+				char ay;
+				cin >> ay;
+			}
+
+			if (stat == 16) {
+				int st;
+				cout << "Press 1 to cancel a ride\n";
+				cin >> st;
+				if (st == 1) {
+					string stat;
+					stat = "cancel";
+					int cusid, divid,vhid;
+					cout << "Enter customer id ";
+					cin >> cusid;
+					cout << "\nEnter driver id\n";
+					cin >> divid;
+					cout << "Enter vehicle id \n";
+					cin >> vhid;
+					cancelservice(cusid, divid,vhid);
+				}
+				cout << "\n                  press any key to go main menu\n";
+				char ay;
+				cin >> ay;
+			}
+			if (stat == 17) {
+				int st;
+				cout << "press 1 to compelete a service \n";
+				cin >> st;
+				if (st == 1) {
+					string stat;
+					stat = "cancel";
+					int cusid, divid,vhid;
+					cout << "Enter customer id ";
+					cin >> cusid;
+					cout << "\nEnter driver id\n";
+					cin >> divid;
+					cout << "Enter vehicle id \n";
+					cin >> vhid;
+					compservice(cusid, divid,vhid);
+				}
+				
+				cout << "\n                  press any key to go main menu\n";
+				char ay;
+				cin >> ay;
+			}
+			if (stat == 18) {
+				cout << "\n                  press any key to continue\n";
+				char ay;
+				cin >> ay;
+
+			}
+			if (stat == 19) {
+				cout << "\n                  press any key to continue\n";
+				char ay;
+				cin >> ay;
+			}
+			if (stat == 20) {
+				cout << "\n                  press any key to continue\n";
+				char ay;
+				cin >> ay;
+			}
+			if (stat == 21) {
+				cout << "\n                  press any key to continue\n";
+				char ay;
+				cin >> ay;
+			}
+			if (stat == 22) {
+
+				cout << "\n                  press any key to continue\n";
+				char ay;
+				cin >> ay;
+			}
+		}
+		system("cls");
+		if (stat == 0)
+			break;
+	}
+	cout << "          - - - - - -Thamks for using fast transportation service- - - - -          \n";
+	cout << "          - - - - - -Have a Nice Day Good Bye- - - - -          \n";
+	return 0;
+}
+  
+
+
+
+//// test code
+//#include<iostream>
+//#include<fstream>
+//using namespace std;
+//class mousa
+//{
+//private:
+//	int *a;
+//	int b;
+//	int* c;
+//	char* n;
+//public:
+//	mousa(int* ,int, int,char *);
+//		mousa(mousa &);
+//		friend ostream& operator << (ostream& out, const mousa& obj);
+//		void delet() {
+//			delete[]a;
+//			delete[]c;
+//			b = 0;
+//		}
+//	~mousa();
+//
+//};
+//ostream& operator << (ostream& out, const mousa& obj) {
+//	out << *obj.a<<"  " << obj.b << endl;
+//	for (int i = 0; i < 5; i++)
+//	{
+//		out<<obj.c[i]<<" ";
+//	}
+//	out << endl;
+//	{
+//		cout <<"hello  " << obj.n;
+//	}
+//	return out;
+//}
+//mousa::mousa(int*z=0, int x=0, int y=0,char*m=nullptr)
+//{	a = new int;
+//	*a = x;
+//	b = y; 
+//	c = new int[5];
+//	for (int i = 0; i < 5; i++)
+//	{
+//		c[i] = z[i];
+//	}
+//	n = new char[1000];
+//	for (int i = 0; i<1000; i++)
+//	{
+//		n[i] = m[i];
+//	}
+//}
+////mousa::mousa(mousa& obj) {
+////	cout << "copy constructor called\n";
+////	b = obj.b;
+////	a = new int;
+////	*a = *obj.a;
+////	c = new int[1000];
+////	for (int i = 0; i < 5; i++)
+////	{
+////		c[i] = obj.c[i];
+////	}
+////	n = new char[1000];
+////	for (int i = 0; n[i] < 50; i++)
+////	{
+////		n[i] = obj.n[i];
+////	}
+////}
+//mousa::~mousa()
+//{
+//}
+//int main()
+//{
+//	int x1, y1;
+//	x1 = 2, y1 = 6;
+//	int* z1 = new int[5];
+//	char* name;
+//	name = new char[1000];
+//	cout << "enter name\n";
+//	cin.getline(name,1000);
+//	for (int i = 0; i < 5; i++)
+//	{
+//		z1[i] = i + 1;
+//	}
+//	mousa obj(z1,x1,y1,name);
+//	cout << obj;
+//	mousa obj1 = obj;
+//	obj.delet();
+//	cout<<obj1;
+//	return 0;
+//}    
